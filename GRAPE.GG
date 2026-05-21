@@ -114,7 +114,7 @@ local Window = Library:CreateWindow({
         Info = 'Best Upcoming Script?!',
         Credit = false,
     },
-DefaultTheme = '{"__Designer.Colors.topGradient":"232323","__Designer.Settings.ShowHideKey":"Enum.KeyCode.RShift","__Designer.Colors.section":"B0AFB0","__Designer.Colors.hoveredOptionBottom":"2D2D2D",[...]
+    DefaultTheme = ""
 })
 
 -- Links Tab
@@ -227,14 +227,14 @@ Mouse.Target:Destroy()
 end)
     end
 }
+
 MainSection:AddToggle{
     Name = '| Infinite Zoom',
     Callback = function(state)
     getgenv().host = game:GetService'Players'.LocalPlayer
-
     host.CameraMaxZoomDistance = math.huge
-        end
-    }   
+    end
+}
 
 MainSection:AddToggle{
     Name = '| Stretch Res',
@@ -243,12 +243,10 @@ MainSection:AddToggle{
     Locked = false,
     Callback = function(state)
         stretchResEnabled = state
-
         if stretchResEnabled then
             getgenv().Resolution = {
                 [".gg/scripters"] = 0.65 
             }
-
             if not stretchConnection then
                 stretchConnection = runService.RenderStepped:Connect(function()
                     Camera.CFrame = Camera.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().Resolution[".gg/scripters"], 0, 0, 0, 1)
@@ -266,25 +264,20 @@ MainSection:AddToggle{
 MainSection:AddToggle{
     Name = "| Call-All",
     Side = "Left",
-
     Callback = function()
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local Players = game:GetService("Players")
-        
         local phoneEvent = ReplicatedStorage:FindFirstChild("RemoteEvents"):FindFirstChild("RE_Phone")
-        
         if phoneEvent then
             for _, player in pairs(Players:GetPlayers()) do
                 if player ~= game.Players.LocalPlayer then 
                     phoneEvent:FireServer("CallRequest", { Target = player })
-        
                     task.wait(1) 
                     phoneEvent:FireServer("CallResponse", { Response = {true} }) 
                 end
             end
         end
-
-end,
+    end,
 }
 
 MainSection:AddToggle{
@@ -293,24 +286,18 @@ MainSection:AddToggle{
     Flag = 'Equid',
     Locked = false,
     Callback = function(state)
-
         local EquipEnabled = false
-
         local function IXIQZO_fake_script(state) 
             local script = Instance.new('LocalScript', PopCorn)
-         
             for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v:IsA("Tool") then
-            v.Parent = game.Players.LocalPlayer.Character
+                if v:IsA("Tool") then
+                    v.Parent = game.Players.LocalPlayer.Character
+                end
             end
-            end
-            end
+        end
         coroutine.wrap(IXIQZO_fake_script)()
-        end,
-        }
-
-
-
+    end,
+}
 
 local SpeedSlider = MainSection:AddSlider({
     Name = 'Adjust Speed',
@@ -323,7 +310,6 @@ local SpeedSlider = MainSection:AddSlider({
     Callback = function(value)
        local player = game.Players.LocalPlayer
         local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
-        
         if humanoid then
             humanoid.WalkSpeed = value 
         end
@@ -346,39 +332,33 @@ local FOVSlider = MainSection:AddSlider({
 local Button = MainSection:AddButton({
     Name = 'Fix-Floor',
     Callback = function()
-
-
-local player = game.Players.LocalPlayer
-
-local function fixFloor()
-    local floor = workspace:FindFirstChild("Floor")
-    if floor then
-        floor.Size = Vector3.new(5000, -1, 5000)
-        floor.Position = Vector3.new(0, 0, 0) 
-        floor.Anchored = true
-    else
-        floor = Instance.new("Part")
-        floor.Name = "Floor"
-        floor.Size = Vector3.new(5000, -1, 5000)
-    	floor.Position = Vector3.new(0, 0, 0)
-        floor.Anchored = true
-        floor.Parent = workspace
+        local player = game.Players.LocalPlayer
+        local function fixFloor()
+            local floor = workspace:FindFirstChild("Floor")
+            if floor then
+                floor.Size = Vector3.new(5000, -1, 5000)
+                floor.Position = Vector3.new(0, 0, 0) 
+                floor.Anchored = true
+            else
+                floor = Instance.new("Part")
+                floor.Name = "Floor"
+                floor.Size = Vector3.new(5000, -1, 5000)
+                floor.Position = Vector3.new(0, 0, 0)
+                floor.Anchored = true
+                floor.Parent = workspace
+            end
+        end
+        player.CharacterAdded:Connect(function(character)
+            fixFloor()
+        end)
+        if player.Character then
+            fixFloor()
+        end
     end
-end
-
-player.CharacterAdded:Connect(function(character)
-    fixFloor()
-end)
-
-if player.Character then
-    fixFloor()
-end
-end
 })
 
-
 local TPSection = GeneralTab:CreateSection({
-    Name = '|Kill Player',
+    Name = '|Kill Player|',
     Side = 'Right'
 })
 
@@ -406,18 +386,13 @@ local TextBoxPlayer = TPSection:AddTextbox({
             if character and character:FindFirstChild("HumanoidRootPart") and targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                 local p1 = character.HumanoidRootPart
                 local targetHRP = targetPlayer.Character.HumanoidRootPart
-        
                 local behindPosition = targetHRP.CFrame * CFrame.new(0, 0, -2)
                 p1.CFrame = behindPosition
             end
-        
             wait(0.01) 
         end
-end,
+    end,
 })
-
-
-
 
 local TGSection = GeneralTab:CreateSection({
     Name = ' |View Options|',
@@ -425,193 +400,192 @@ local TGSection = GeneralTab:CreateSection({
 })
 
 local TargetName = ""
-    local originalCameraSubject
-    local ScreenGui
+local originalCameraSubject
+local ScreenGui
 
-    local function findPlayerByName(name)
-        name = string.lower(name)
-        for _, player in pairs(game.Players:GetPlayers()) do
-            local playerName = string.lower(player.Name)
-            local displayName = player.DisplayName and string.lower(player.DisplayName) or nil
-            
-            if string.sub(playerName, 1, #name) == name or (displayName and string.sub(displayName, 1, #name) == name) then
-                return player
-            end
+local function findPlayerByName(name)
+    name = string.lower(name)
+    for _, player in pairs(game.Players:GetPlayers()) do
+        local playerName = string.lower(player.Name)
+        local displayName = player.DisplayName and string.lower(player.DisplayName) or nil
+        
+        if string.sub(playerName, 1, #name) == name or (displayName and string.sub(displayName, 1, #name) == name) then
+            return player
         end
-        return nil
+    end
+    return nil
+end
+
+TGSection:AddTextbox({
+    Name = "       <-Target Name->",
+    Value = TargetName,
+    Callback = function(input)
+        local player = findPlayerByName(input)
+        TargetName = player and player.Name or ""
+    end
+})
+
+local function createInventoryGUI(playerName)
+    if ScreenGui then
+        ScreenGui:Destroy() 
     end
 
-    TGSection:AddTextbox({
-        Name = "       <-Target Name->",
-        Value = TargetName,
-        Callback = function(input)
-            local player = findPlayerByName(input)
-            TargetName = player and player.Name or ""
-        end
-    })
+    ScreenGui = Instance.new("ScreenGui")
+    local Background = Instance.new("Frame")
+    local ScrollFrame = Instance.new("ScrollingFrame")
+    local TitleLabel = Instance.new("TextLabel")
+    local UIListLayout = Instance.new("UIListLayout")
+    local UIListPadding = Instance.new("UIPadding")
+    local InvLabels = {}
 
-    local function createInventoryGUI(playerName)
-        if ScreenGui then
-            ScreenGui:Destroy() 
-        end
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-        ScreenGui = Instance.new("ScreenGui")
-        local Background = Instance.new("Frame")
-        local ScrollFrame = Instance.new("ScrollingFrame")
-        local TitleLabel = Instance.new("TextLabel")
-        local UIListLayout = Instance.new("UIListLayout")
-        local UIListPadding = Instance.new("UIPadding")
-        local InvLabels = {}
+    Background.Name = "Background"
+    Background.Parent = ScreenGui
+    Background.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+    Background.BorderSizePixel = 2
+    Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Background.Position = UDim2.new(1, -260, 0, 20)
+    Background.Size = UDim2.new(0.12, 0, 0.3, 0)
+    Background.ClipsDescendants = true
 
-        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-        ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    local gradient = Instance.new("UIGradient")
+    gradient.Parent = Background
+    gradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(42, 42, 42)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 42, 42))
+    }
+    gradient.Rotation = 45
 
-        Background.Name = "Background"
-        Background.Parent = ScreenGui
-        Background.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
-        Background.BorderSizePixel = 2
-        Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        Background.Position = UDim2.new(1, -260, 0, 20)
-        Background.Size = UDim2.new(0.12, 0, 0.3, 0)
-        Background.ClipsDescendants = true
+    local stroke = Instance.new("UIStroke")
+    stroke.Parent = Background
+    stroke.Color = Color3.fromRGB(0, 0, 0)
+    stroke.Thickness = 2
+    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
-        local gradient = Instance.new("UIGradient")
-        gradient.Parent = Background
-        gradient.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(42, 42, 42)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 42, 42))
-        }
-        gradient.Rotation = 45
+    TitleLabel.Name = "TitleLabel"
+    TitleLabel.Parent = Background
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 18
+    TitleLabel.TextScaled = true
+    TitleLabel.TextWrapped = true
+    TitleLabel.TextStrokeTransparency = 0.3
+    TitleLabel.Text = "Inventory"
 
-        local stroke = Instance.new("UIStroke")
-        stroke.Parent = Background
-        stroke.Color = Color3.fromRGB(0, 0, 0)
-        stroke.Thickness = 2
-        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    ScrollFrame.Parent = Background
+    ScrollFrame.Size = UDim2.new(1, -10, 0, 250)
+    ScrollFrame.Position = UDim2.new(0, 5, 0, 35)
+    ScrollFrame.ScrollBarThickness = 10
+    ScrollFrame.BackgroundTransparency = 1
+    ScrollFrame.ClipsDescendants = true
 
-        TitleLabel.Name = "TitleLabel"
-        TitleLabel.Parent = Background
-        TitleLabel.BackgroundTransparency = 1
-        TitleLabel.Size = UDim2.new(1, 0, 0, 30)
-        TitleLabel.Font = Enum.Font.SourceSansBold
-        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TitleLabel.TextSize = 18
-        TitleLabel.TextScaled = true
-        TitleLabel.TextWrapped = true
-        TitleLabel.TextStrokeTransparency = 0.3
-        TitleLabel.Text = "Inventory"
+    UIListLayout.Parent = ScrollFrame
+    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 5)
 
-        ScrollFrame.Parent = Background
-        ScrollFrame.Size = UDim2.new(1, -10, 0, 250)
-        ScrollFrame.Position = UDim2.new(0, 5, 0, 35)
-        ScrollFrame.ScrollBarThickness = 10
-        ScrollFrame.BackgroundTransparency = 1
-        ScrollFrame.ClipsDescendants = true
+    UIListPadding.Parent = ScrollFrame
+    UIListPadding.PaddingTop = UDim.new(0, 5)
 
-        UIListLayout.Parent = ScrollFrame
-        UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-        UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        UIListLayout.Padding = UDim.new(0, 5)
+    local function createLabel(name)
+        local label = Instance.new("TextLabel")
+        label.Name = name
+        label.BackgroundTransparency = 0.5
+        label.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        label.BorderSizePixel = 1
+        label.BorderColor3 = Color3.fromRGB(30, 30, 30)
+        label.Size = UDim2.new(1, -10, 0, 22)
+        label.Font = Enum.Font.SourceSans
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.TextScaled = true
+        label.TextSize = 14
+        label.TextWrapped = true
+        return label
+    end
 
-        UIListPadding.Parent = ScrollFrame
-        UIListPadding.PaddingTop = UDim.new(0, 5)
+    for i = 1, 40 do
+        local label = createLabel("Inv" .. i)
+        label.Parent = ScrollFrame
+        table.insert(InvLabels, label)
+    end
 
-        local function createLabel(name)
-            local label = Instance.new("TextLabel")
-            label.Name = name
-            label.BackgroundTransparency = 0.5
-            label.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            label.BorderSizePixel = 1
-            label.BorderColor3 = Color3.fromRGB(30, 30, 30)
-            label.Size = UDim2.new(1, -10, 0, 22)
-            label.Font = Enum.Font.SourceSans
-            label.TextColor3 = Color3.fromRGB(255, 255, 255)
-            label.TextScaled = true
-            label.TextSize = 14
-            label.TextWrapped = true
-            return label
-        end
-
-        for i = 1, 40 do
-            local label = createLabel("Inv" .. i)
-            label.Parent = ScrollFrame
-            table.insert(InvLabels, label)
-        end
-
-        local function getPlayerInventory(targetPlayer)
-            local backpack = targetPlayer:FindFirstChildOfClass("Backpack")
-            if backpack then
-                local items = backpack:GetChildren()
-                for i, label in ipairs(InvLabels) do
-                    label.Text = items[i] and items[i].Name or ""
-                end
-                ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, math.max(#items, #InvLabels) * 27)
-            else
-                for _, label in ipairs(InvLabels) do
-                    label.Text = "No Items"
-                end
-                ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 27)
+    local function getPlayerInventory(targetPlayer)
+        local backpack = targetPlayer:FindFirstChildOfClass("Backpack")
+        if backpack then
+            local items = backpack:GetChildren()
+            for i, label in ipairs(InvLabels) do
+                label.Text = items[i] and items[i].Name or ""
             end
-        end
-
-        local targetPlayer = findPlayerByName(playerName)
-
-        if targetPlayer then
-            TitleLabel.Text = playerName .. "'s Inventory"
-            getPlayerInventory(targetPlayer)
+            ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, math.max(#items, #InvLabels) * 27)
         else
-            TitleLabel.Text = "Player Not Found"
+            for _, label in ipairs(InvLabels) do
+                label.Text = "No Items"
+            end
+            ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 27)
         end
     end
 
-    TGSection:AddToggle({
-        Name = "| View [Inventory]",
-        Flag = "TGSection_View[Inventory]",
-        Callback = function(State)
-            if State then
-                createInventoryGUI(TargetName)
-            else
-                if ScreenGui then
-                    ScreenGui:Destroy()
-                    ScreenGui = nil
-                end
+    local targetPlayer = findPlayerByName(playerName)
+
+    if targetPlayer then
+        TitleLabel.Text = playerName .. "'s Inventory"
+        getPlayerInventory(targetPlayer)
+    else
+        TitleLabel.Text = "Player Not Found"
+    end
+end
+
+TGSection:AddToggle({
+    Name = "| View [Inventory]",
+    Flag = "TGSection_View[Inventory]",
+    Callback = function(State)
+        if State then
+            createInventoryGUI(TargetName)
+        else
+            if ScreenGui then
+                ScreenGui:Destroy()
+                ScreenGui = nil
             end
         end
-    })
+    end
+})
 
-    TGSection:AddToggle({
-        Name = "| Spectate",
-        Callback = function(Value)
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
+TGSection:AddToggle({
+    Name = "| Spectate",
+    Callback = function(Value)
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
 
-            if Value then
-                if IsSpectating then
-                    return
-                end
-
-                local TargetPlayer = Players:FindFirstChild(TargetName)
-
-                if TargetPlayer and TargetPlayer.Character then
-                    originalCameraSubject = workspace.CurrentCamera.CameraSubject
-                    workspace.CurrentCamera.CameraSubject = TargetPlayer.Character:FindFirstChild("Humanoid")
-                    IsSpectating = true
-                else
-                    CreateNotification({
-                        Title = "Error",
-                        Text = "Invalid Name",
-                        ButtonText = "Okay",
-                        Duration = 99999
-                    })
-                end
-            else
-                if IsSpectating then
-                    workspace.CurrentCamera.CameraSubject = originalCameraSubject
-                    IsSpectating = false
-                end
+        if Value then
+            if IsSpectating then
+                return
             end
-        end,
-    })
+
+            local TargetPlayer = Players:FindFirstChild(TargetName)
+
+            if TargetPlayer and TargetPlayer.Character then
+                originalCameraSubject = workspace.CurrentCamera.CameraSubject
+                workspace.CurrentCamera.CameraSubject = TargetPlayer.Character:FindFirstChild("Humanoid")
+                IsSpectating = true
+            else
+                Library:CreateNotification({
+                    Title = "Error",
+                    Text = "Invalid Name",
+                    Duration = 3
+                })
+            end
+        else
+            if IsSpectating then
+                workspace.CurrentCamera.CameraSubject = originalCameraSubject
+                IsSpectating = false
+            end
+        end
+    end,
+})
 
 local GunSection = GeneralTab:CreateSection({
     Name = '|Gun Mods|',
@@ -619,10 +593,7 @@ local GunSection = GeneralTab:CreateSection({
 })
 
 local Players = game:GetService("Players")
-
-
 local isToggled = false
-
 
 local function continuouslyUpdateWeaponStats(player)
     while isToggled do 
@@ -633,7 +604,7 @@ local function continuouslyUpdateWeaponStats(player)
                      if item:FindFirstChild("Ammo") and item:FindFirstChild("Mag") then
                         item.Ammo.Value = math.huge
                         item.Mag.Value = math.huge
-                        game:GetService("ReplicatedStorage").RemoteEvents.ChangeMagAndAmmo:Destroy()
+                        pcall(function() game:GetService("ReplicatedStorage").RemoteEvents.ChangeMagAndAmmo:Destroy() end)
                     end
                 end
             end
@@ -642,9 +613,6 @@ local function continuouslyUpdateWeaponStats(player)
     end
 end
 
-
-
-
 local Toggle = GunSection:AddToggle({
     Name = "| Infinite Ammo ",
     Value = false,
@@ -652,7 +620,6 @@ local Toggle = GunSection:AddToggle({
     Callback = function(Value)
         isToggled = Value 
         if isToggled then
-            
             for _, player in ipairs(Players:GetPlayers()) do
                 task.spawn(function()
                     continuouslyUpdateWeaponStats(player)
@@ -672,13 +639,14 @@ local Toggle = GunSection:AddToggle({
         
         for _, item in pairs(backpack:GetChildren()) do
             if item:IsA("Tool") and item:FindFirstChild("Setting") then
-                local gun = require(item.Setting)
-                local music = {109566167393222} 
-                gun["HitCharSndIDs"] = music
-                gun["HitCharSndVolume"] = 10
+                pcall(function()
+                    local gun = require(item.Setting)
+                    local music = {109566167393222} 
+                    gun["HitCharSndIDs"] = music
+                    gun["HitCharSndVolume"] = 10
+                end)
             end
         end
-        
     end
 })
 
@@ -692,34 +660,19 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 
-
-if isToggled then
-    for _, player in ipairs(Players:GetPlayers()) do
-        task.spawn(function()
-            continuouslyUpdateWeaponStats(player)
-        end)
-    end
-end
-
-local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 local toggleEnabled = false 
 local fireRateValue = 0.147 
+
 local function enableOneShot(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-        
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" and settings.BaseDamage ~= nil then
                 settings.FireRate = fireRateValue 
                 settings.Auto = true 
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
@@ -727,18 +680,12 @@ end
 local function disableOneShot(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-        
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" and settings.BaseDamage ~= nil then
                 settings.FireRate = 0.147 
                 settings.Auto = false  
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
@@ -802,7 +749,6 @@ local Slider = GunSection:AddSlider({
     Decimals = 3, 
     Callback = function(Value)
         fireRateValue = Value
-        print("")
 
         if toggleEnabled and localPlayer.Character then
             for _, child in ipairs(localPlayer.Character:GetChildren()) do
@@ -814,24 +760,16 @@ local Slider = GunSection:AddSlider({
     end
 })
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-local toggleEnabled = false 
+toggleEnabled = false 
 
 local function quickReloadEnabled(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-        
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" and settings.ReloadTime ~= nil then
                 settings.ReloadTime = 0 
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
@@ -839,22 +777,16 @@ end
 local function quickReload(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-        
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" and settings.ReloadTime ~= nil then
                 settings.ReloadTime = 2.9 
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
 
-local function onCharacterAdded(character)
+local function onCharacterAddedReload(character)
     character.ChildAdded:Connect(function(child)
         if child:IsA("Tool") then
             if toggleEnabled then
@@ -877,10 +809,10 @@ local function onCharacterAdded(character)
 end
 
 if localPlayer.Character then
-    onCharacterAdded(localPlayer.Character)
+    onCharacterAddedReload(localPlayer.Character)
 end
 
-localPlayer.CharacterAdded:Connect(onCharacterAdded)
+localPlayer.CharacterAdded:Connect(onCharacterAddedReload)
 
 local Toggle = GunSection:AddToggle({
     Name = '| Quick Reload',
@@ -915,26 +847,23 @@ local Toggle = GunSection:AddToggle({
         
         for _, item in pairs(backpack:GetChildren()) do
             if item:IsA("Tool") and item:FindFirstChild("Setting") then
-                local gun = require(item.Setting)
-                gun["ShotgunEnabled"] = true
+                pcall(function()
+                    local gun = require(item.Setting)
+                    gun["ShotgunEnabled"] = true
+                end)
             end
         end
     end
 })
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-local toggleEnabled = false 
-
+toggleEnabled = false 
 local defaultSettings = {}
 
 local function enableModifications(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" then
                 if not defaultSettings[tool.Name] then
                     defaultSettings[tool.Name] = {
@@ -951,11 +880,7 @@ local function enableModifications(tool)
                 settings.SpreadY = 0
                 settings.Range = 50000
                 settings.Recoil = 0
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
@@ -963,10 +888,8 @@ end
 local function resetToDefaults(tool)
     if tool:IsA("Tool") then
         local settingModule = tool:FindFirstChild("Setting")
-
         if settingModule and settingModule:IsA("ModuleScript") then
             local success, settings = pcall(require, settingModule)
-
             if success and type(settings) == "table" and defaultSettings[tool.Name] then
                 local defaults = defaultSettings[tool.Name]
                 settings.Accuracy = defaults.Accuracy
@@ -974,16 +897,12 @@ local function resetToDefaults(tool)
                 settings.SpreadY = defaults.SpreadY
                 settings.Range = defaults.Range
                 settings.Recoil = defaults.Recoil
-            else
-                print("")
             end
-        else
-            print("")
         end
     end
 end
 
-local function onCharacterAdded(character)
+local function onCharacterAddedRecoil(character)
     character.ChildAdded:Connect(function(child)
         if child:IsA("Tool") then
             if toggleEnabled then
@@ -1006,10 +925,10 @@ local function onCharacterAdded(character)
 end
 
 if localPlayer.Character then
-    onCharacterAdded(localPlayer.Character)
+    onCharacterAddedRecoil(localPlayer.Character)
 end
 
-localPlayer.CharacterAdded:Connect(onCharacterAdded)
+localPlayer.CharacterAdded:Connect(onCharacterAddedRecoil)
 
 local Toggle = GunSection:AddToggle({
     Name = '| 0 Recoil',
@@ -1039,33 +958,27 @@ local Toggle = GunSection:AddToggle({
     Flag = "NoJam",
     Locked = false,
     Callback = function()
-
         local player = game.Players.LocalPlayer
-local backpack = player.Backpack
+        local backpack = player.Backpack
 
-for _, item in pairs(backpack:GetChildren()) do
-    if item:IsA("Tool") and item:FindFirstChild("Setting") then
-        local gun = require(item.Setting)
-        gun["JamChance"] = 0 
+        for _, item in pairs(backpack:GetChildren()) do
+            if item:IsA("Tool") and item:FindFirstChild("Setting") then
+                pcall(function()
+                    local gun = require(item.Setting)
+                    gun["JamChance"] = 0 
+                end)
+            end
+        end
     end
-end
-end
 })
-
-
-
 
 local MainSection = GeneralTab:CreateSection({
     Name = '|Spawn To Locations|',
     Side = 'Left'  
 })
 
-
 local selectedSpawnPoint = nil
 local spawnActivated = false
-local Tweening = false
-local currentTween = nil
-local characterAddedConnection = nil
 
 local spawnLocations = {
     ["Gun Store 1"] = CFrame.new(206.736328125, 3.7371325492858887, -188.67916870117188),
@@ -1093,41 +1006,3 @@ MainSection:AddDropdown({
         selectedSpawnPoint = spawnLocations[item]
     end
 })
-
-local function applyCustomization(character)
-    local player = game.Players.LocalPlayer
-    local bodyColors = player:FindFirstChild("BodyColors")
-    if character:FindFirstChild("BodyColors") and bodyColors then
-        character.BodyColors.HeadColor = bodyColors.HeadColor
-        character.BodyColors.TorsoColor = bodyColors.TorsoColor
-        character.BodyColors.LeftArmColor = bodyColors.LeftArmColor
-        character.BodyColors.RightArmColor = bodyColors.RightArmColor
-        character.BodyColors.LeftLegColor = bodyColors.LeftLegColor
-        character.BodyColors.RightLegColor = bodyColors.RightLegColor
-    end
-end
-
-local function teleportToSpawnPoint()
-    local player = game.Players.LocalPlayer
-    if selectedSpawnPoint then
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character:SetPrimaryPartCFrame(selectedSpawnPoint)
-        end
-    end
-end
-
-local function onCharacterAdded(character)
-    character:WaitForChild("HumanoidRootPart")
-    applyCustomization(character)
-    if spawnActivated then
-        wait(1.0)
-        teleportToSpawnPoint()
-    end
-end
-
-local function clearCharacterAddedConnection()
-    if characterAddedConnection then
-        characterAddedConnection:Disconnect()
-    end
-end
