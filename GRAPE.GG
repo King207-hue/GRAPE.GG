@@ -1,1 +1,1064 @@
-local a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z=(function()local A=loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)("Pepsi's UI Library")local B=A:CreateWindow({Name='GRAPE.GG | South Bronx',Themeable={Info='Best Upcoming Script?!',Credit=false,},DefaultTheme='{"__Designer.Colors.topGradient":"232323","__Designer.Settings.ShowHideKey":"Enum.KeyCode.RShift","__Designer.Colors.section":"B0AFB0","__Designer.Colors.hoveredOptionBottom":"2D2D2D",[...]'})local C=B:CreateTab({Name='General'})local D=C:CreateSection({Name='|Player|',Side='Left'})D:AddToggle({Name="| Semi GodMode",StartingState=false,Description="This Enables Semi GodMode.",Callback=function(E)if E then loadstring(game:HttpGet('https://pastebin.com/raw/a81PCdNV'))()end end})D:AddToggle({Name="| Hitbox Expander",StartingState=false,Description="This Expands the Hitbox of Players.",Callback=function(E)if E then loadstring(game:HttpGet('https://pastebin.com/raw/6zXxnvRE'))()end end})D:AddToggle({Name="| Forward Teleport ( T )",StartingState=false,Description="This Teleports You Forward.",Callback=function(E)if E then loadstring(game:HttpGet('https://pastebin.com/raw/ZjVJQMAk'))()end end})D:AddToggle{Name="| Insta-Interact",Callback=function()for F,G in pairs(game:GetService("Workspace"):GetDescendants())do if G:IsA("ProximityPrompt")then G["HoldDuration"]=0 end end game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(G)G["HoldDuration"]=0 end)end}D:AddToggle({Name="| Fly ( V )",StartingState=false,Callback=function(E)if E then loadstring(game:HttpGet('https://pastebin.com/raw/TVYcXkS4'))()end end})D:AddToggle({Name="| Invisible ( X )",StartingState=false,Callback=function(E)if E then loadstring(game:HttpGet('https://pastebin.com/raw/vsWgWXPY'))()end end})D:AddToggle{Name="| Ctrl + Click = Delete",Callback=function()local H=game:GetService("Players").LocalPlayer local I=H:GetMouse()I.Button1Down:connect(function()if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl)then return end if not I.Target then return end I.Target:Destroy()end)end}D:AddToggle{Name='| Infinite Zoom',Callback=function(E)getgenv().host=game:GetService'Players'.LocalPlayer host.CameraMaxZoomDistance=math.huge end}D:AddToggle{Name='| Stretch Res',Value=false,Flag='stretchres',Locked=false,Callback=function(E)stretchResEnabled=E if stretchResEnabled then getgenv().Resolution={[".gg/scripters"]=0.65}if not stretchConnection then stretchConnection=runService.RenderStepped:Connect(function()Camera.CFrame=Camera.CFrame*CFrame.new(0,0,0,1,0,0,0,getgenv().Resolution[".gg/scripters"],0,0,0,1)end)end else if stretchConnection then stretchConnection:Disconnect()stretchConnection=nil end end end}D:AddToggle{Name="| Call-All",Side="Left",Callback=function()local J=game:GetService("ReplicatedStorage")local K=game:GetService("Players")local L=J:FindFirstChild("RemoteEvents"):FindFirstChild("RE_Phone")if L then for M,N in pairs(K:GetPlayers())do if N~=game.Players.LocalPlayer then L:FireServer("CallRequest",{Target=N})task.wait(1)L:FireServer("CallResponse",{Response={true}})end end end end,}D:AddToggle{Name='| Equip All',Value=false,Flag='Equid',Locked=false,Callback=function(E)local O=false local function P(E)local Q=Instance.new('LocalScript',PopCorn)for F,G in pairs(game.Players.LocalPlayer.Backpack:GetChildren())do if G:IsA("Tool")then G.Parent=game.Players.LocalPlayer.Character end end end coroutine.wrap(P)()end,}local R=D:AddSlider({Name='Adjust Speed',Flag="SpeedFster",Value=12,Min=0,Max=23,Decimals=1,llegalInput=false,Callback=function(S)local T=game.Players.LocalPlayer local U=T.Character and T.Character:FindFirstChild("Humanoid")if U then U.WalkSpeed=S end end})local V=D:AddSlider({Name='Adjust FOV',Flag="BegFOV",Value=70,Min=70,Max=120,Decimals=1,llegalInput=false,Callback=function(S)workspace.CurrentCamera.FieldOfView=S end})local W=D:AddButton({Name='Fix-Floor',Callback=function()local T=game.Players.LocalPlayer local function X()local Y=workspace:FindFirstChild("Floor")if Y then Y.Size=Vector3.new(5000,-1,5000)Y.Position=Vector3.new(0,0,0)Y.Anchored=true else Y=Instance.new("Part")Y.Name="Floor"Y.Size=Vector3.new(5000,-1,5000)Y.Position=Vector3.new(0,0,0)Y.Anchored=true Y.Parent=workspace end end T.CharacterAdded:Connect(function(Z)X()end)if T.Character then X()end end})local AA=C:CreateSection({Name='|Kill Player|',Side='Right'})local AB=AA:AddTextbox({Name='Tp To Player (Stop = L)',Flag="Name",Value="",Locked=true,Callback=function(AC)local AD=game:GetService("UserInputService")local AE=true local AF=(AC)AD.InputBegan:Connect(function(AG,AH)if AG.KeyCode==Enum.KeyCode.L then AE=false end end)while AE do local T=game.Players.LocalPlayer local Z=T.Character local AI=game.Players:FindFirstChild(AF)if Z and Z:FindFirstChild("HumanoidRootPart")and AI and AI.Character and AI.Character:FindFirstChild("HumanoidRootPart")then local AJ=Z.HumanoidRootPart local AK=AI.Character.HumanoidRootPart local AL=AK.CFrame*CFrame.new(0,0,-2)AJ.CFrame=AL end wait(0.01)end end,})local AM=C:CreateSection({Name=' |View Options|',Side='Right'})local AN=""local AO local AP local function AQ(AR)AR=string.lower(AR)for M,N in pairs(game.Players:GetPlayers())do local AS=string.lower(N.Name)local AT=N.DisplayName and string.lower(N.DisplayName)or nil if string.sub(AS,1,#AR)==AR or(AT and string.sub(AT,1,#AR)==AR)then return N end end return nil end AM:AddTextbox({Name="       <-Target Name->",Value=AN,Callback=function(AU)local N=AQ(AU)AN=N and N.Name or ""end})local function AV(AW)if AP then AP:Destroy()end AP=Instance.new("ScreenGui")local AX=Instance.new("Frame")local AY=Instance.new("ScrollingFrame")local AZ=Instance.new("TextLabel")local BA=Instance.new("UIListLayout")local BB=Instance.new("UIPadding")local BC={}AP.Parent=game.Players.LocalPlayer:WaitForChild("PlayerGui")AP.ZIndexBehavior=Enum.ZIndexBehavior.Sibling AX.Name="Background"AX.Parent=AP AX.BackgroundColor3=Color3.fromRGB(26,26,26)AX.BorderSizePixel=2 AX.BorderColor3=Color3.fromRGB(0,0,0)AX.Position=UDim2.new(1,-260,0,20)AX.Size=UDim2.new(0.12,0,0.3,0)AX.ClipsDescendants=true local BD=Instance.new("UIGradient")BD.Parent=AX BD.Color=ColorSequence.new{ColorSequenceKeypoint.new(0,Color3.fromRGB(42,42,42)),ColorSequenceKeypoint.new(1,Color3.fromRGB(42,42,42))}BD.Rotation=45 local BE=Instance.new("UIStroke")BE.Parent=AX BE.Color=Color3.fromRGB(0,0,0)BE.Thickness=2 BE.ApplyStrokeMode=Enum.ApplyStrokeMode.Border AZ.Name="TitleLabel"AZ.Parent=AX AZ.BackgroundTransparency=1 AZ.Size=UDim2.new(1,0,0,30)AZ.Font=Enum.Font.SourceSansBold AZ.TextColor3=Color3.fromRGB(255,255,255)AZ.TextSize=18 AZ.TextScaled=true AZ.TextWrapped=true AZ.TextStrokeTransparency=0.3 AZ.Text="Inventory"AY.Parent=AX AY.Size=UDim2.new(1,-10,0,250)AY.Position=UDim2.new(0,5,0,35)AY.ScrollBarThickness=10 AY.BackgroundTransparency=1 AY.ClipsDescendants=true BA.Parent=AY BA.HorizontalAlignment=Enum.HorizontalAlignment.Center BA.SortOrder=Enum.SortOrder.LayoutOrder BA.Padding=UDim.new(0,5)BB.Parent=AY BB.PaddingTop=UDim.new(0,5)local function BF(BG)local BH=Instance.new("TextLabel")BH.Name=BG BH.BackgroundTransparency=0.5 BH.BackgroundColor3=Color3.fromRGB(40,40,40)BH.BorderSizePixel=1 BH.BorderColor3=Color3.fromRGB(30,30,30)BH.Size=UDim2.new(1,-10,0,22)BH.Font=Enum.Font.SourceSans BH.TextColor3=Color3.fromRGB(255,255,255)BH.TextScaled=true BH.TextSize=14 BH.TextWrapped=true return BH end for F=1,40 do local BH=BF("Inv"..F)BH.Parent=AY table.insert(BC,BH)end local function BI(N)local BJ=N:FindFirstChildOfClass("Backpack")if BJ then local BK=BJ:GetChildren()for F,BL in ipairs(BC)do BL.Text=BK[F]and BK[F].Name or ""end AY.CanvasSize=UDim2.new(0,0,0,math.max(#BK,#BC)*27)else for M,BL in ipairs(BC)do BL.Text="No Items"end AY.CanvasSize=UDim2.new(0,0,0,27)end end local N=AQ(AW)if N then AZ.Text=AW.."'s Inventory"BI(N)else AZ.Text="Player Not Found"end end AM:AddToggle({Name="| View [Inventory]",Flag="TGSection_View[Inventory]",Callback=function(BM)if BM then AV(AN)else if AP then AP:Destroy()AP=nil end end end})AM:AddToggle({Name="| Spectate",Callback=function(BN)local K=game:GetService("Players")local BO=K.LocalPlayer if BN then if IsSpectating then return end local BP=K:FindFirstChild(AN)if BP and BP.Character then AO=workspace.CurrentCamera.CameraSubject workspace.CurrentCamera.CameraSubject=BP.Character:FindFirstChild("Humanoid")IsSpectating=true else CreateNotification({Title="Error",Text="Invalid Name",ButtonText="Okay",Duration=99999})end else if IsSpectating then workspace.CurrentCamera.CameraSubject=AO IsSpectating=false end end end,})local BQ=C:CreateSection({Name='|Gun Mods|',Side='Left'})local K=game:GetService("Players")local BR=false local function BS(N)while BR do local BJ=N:FindFirstChild("Backpack")if BJ then for M,BT in ipairs(BJ:GetChildren())do if BT:IsA("Tool")then if BT:FindFirstChild("Ammo")and BT:FindFirstChild("Mag")then BT.Ammo.Value=math.huge BT.Mag.Value=math.huge game:GetService("ReplicatedStorage").RemoteEvents.ChangeMagAndAmmo:Destroy()end end end end wait(0)end end local BU=BQ:AddToggle({Name="| Infinite Ammo",Value=false,Flag="WeaponStatsToggle",Callback=function(BN)BR=BN if BR then for M,N in ipairs(K:GetPlayers())do task.spawn(function()BS(N)end)end end end,})local BV=BQ:AddToggle({Name='| Music On Hit',Value=false,Flag="Hit",Callback=function()local T=game.Players.LocalPlayer local BJ=T.Backpack for M,BT in pairs(BJ:GetChildren())do if BT:IsA("Tool")and BT:FindFirstChild("Setting")then local BW=require(BT.Setting)local BX={109566167393222}BW["HitCharSndIDs"]=BX BW["HitCharSndVolume"]=10 end end end})K.PlayerAdded:Connect(function(N)N.CharacterAdded:Connect(function()if BR then task.spawn(function()BS(N)end)end end)end)if BR then for M,N in ipairs(K:GetPlayers())do task.spawn(function()BS(N)end)end end local K=game:GetService("Players")local BY=K.LocalPlayer local BZ=false local CA=0.147 local function CB(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"and CE.BaseDamage~=nil then CE.FireRate=CA CE.Auto=true else print("")end else print("")end end end local function CF(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"and CE.BaseDamage~=nil then CE.FireRate=0.147 CE.Auto=false else print("")end else print("")end end end local function CG(Z)Z.ChildAdded:Connect(function(CH)if CH:IsA("Tool")then if BZ then CB(CH)else CF(CH)end end end)for M,CH in ipairs(Z:GetChildren())do if CH:IsA("Tool")then if BZ then CB(CH)else CF(CH)end end end end if BY.Character then CG(BY.Character)end BY.CharacterAdded:Connect(CG)local CI=BQ:AddToggle({Name='| Rapid Fire',Value=false,Flag='rafire',Locked=false,Callback=function(BN)BZ=BN if BY.Character then for M,CH in ipairs(BY.Character:GetChildren())do if CH:IsA("Tool")then if BZ then CB(CH)else CF(CH)end end end end end})local CJ=BQ:AddSlider({Name='Firerate Settings',Flag="sliderRate",Value=0.147,Min=0.03,Max=0.147,Decimals=3,Callback=function(BN)CA=BN print("")if BZ and BY.Character then for M,CH in ipairs(BY.Character:GetChildren())do if CH:IsA("Tool")then CB(CH)end end end end})local K=game:GetService("Players")local BY=K.LocalPlayer local BZ=false local function CK(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"and CE.ReloadTime~=nil then CE.ReloadTime=0 else print("")end else print("")end end end local function CL(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"and CE.ReloadTime~=nil then CE.ReloadTime=2.9 else print("")end else print("")end end end local function CM(Z)Z.ChildAdded:Connect(function(CH)if CH:IsA("Tool")then if BZ then CK(CH)else CL(CH)end end end)for M,CH in ipairs(Z:GetChildren())do if CH:IsA("Tool")then if BZ then CK(CH)else CL(CH)end end end end if BY.Character then CM(BY.Character)end BY.CharacterAdded:Connect(CM)local CN=BQ:AddToggle({Name='| Quick Reload',Value=false,Flag='quickfire',Locked=false,Callback=function(BN)BZ=BN if BY.Character then for M,CH in ipairs(BY.Character:GetChildren())do if CH:IsA("Tool")then if BZ then CK(CH)else CL(CH)end end end end end})local CO=BQ:AddToggle({Name="| Shotgun Mode",Value=false,Flag="Shotgun",locked=false,Callback=function()local T=game.Players.LocalPlayer local BJ=T.Backpack for M,BT in pairs(BJ:GetChildren())do if BT:IsA("Tool")and BT:FindFirstChild("Setting")then local BW=require(BT.Setting)BW["ShotgunEnabled"]=true end end end})local K=game:GetService("Players")local BY=K.LocalPlayer local BZ=false local CP={}local function CQ(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"then if not CP[BT.Name]then CP[BT.Name]={Accuracy=CE.Accuracy,SpreadX=CE.SpreadX,SpreadY=CE.SpreadY,Range=CE.Range,Recoil=CE.Recoil}end CE.Accuracy=1 CE.SpreadX=0 CE.SpreadY=0 CE.Range=50000 CE.Recoil=0 else print("")end else print("")end end end local function CR(BT)if BT:IsA("Tool")then local CC=BT:FindFirstChild("Setting")if CC and CC:IsA("ModuleScript")then local CD,CE=pcall(require,CC)if CD and type(CE)=="table"and CP[BT.Name]then local CS=CP[BT.Name]CE.Accuracy=CS.Accuracy CE.SpreadX=CS.SpreadX CE.SpreadY=CS.SpreadY CE.Range=CS.Range CE.Recoil=CS.Recoil else print("")end else print("")end end end local function CT(Z)Z.ChildAdded:Connect(function(CH)if CH:IsA("Tool")then if BZ then CQ(CH)else CR(CH)end end end)for M,CH in ipairs(Z:GetChildren())do if CH:IsA("Tool")then if BZ then CQ(CH)else CR(CH)end end end end if BY.Character then CT(BY.Character)end BY.CharacterAdded:Connect(CT)local CU=BQ:AddToggle({Name='| 0 Recoil',Value=false,Flag='quickaim',Locked=false,Callback=function(BN)BZ=BN if BY.Character then for M,CH in ipairs(BY.Character:GetChildren())do if CH:IsA("Tool")then if BZ then CQ(CH)else CR(CH)end end end end end})local CV=BQ:AddToggle({Name="| No Jam",Value=false,Flag="NoJam",Locked=flase,Callback=function()local T=game.Players.LocalPlayer local BJ=T.Backpack for M,BT in pairs(BJ:GetChildren())do if BT:IsA("Tool")and BT:FindFirstChild("Setting")then local BW=require(BT.Setting)BW["JamChance"]=0 end end end})local CW=C:CreateSection({Name='|Spawn To Locations|',Side='Left'})local CX=nil local CY=false local CZ=false local DA=nil local DB=nil local DC={["Gun Store 1"]=CFrame.new(206.736328125,3.7371325492858887,-188.67916870117188),["Gun Store 2"]=CFrame.new(-493.9350280761719,3.8621325492858887,360.4673156738281),["Boxing Gym"]=CFrame.new(-563.9724731445312,3.5371451377868652,-66.1060562133789),["Garbage Job"]=CFrame.new(717.6341552734375,3.537200450897217,161.44554138183594),["Bank"]=CFrame.new(-56.422027587890625,3.7371387481689453,-329.57785034179688),["Studio"]=CFrame.new(468.3650207519531,4.112238883972168,159.92874145507812),["Police Station"]=CFrame.new(748.6831665039062,4.912145614624023,-255.74874877929688),["Car Shop"]=CFrame.new(730.1787109375,3.709824562072754,449.9476013183594),["Cosmic Cuts"]=CFrame.new(57.606021881103516,3.7371392250061035,-64.30176544189453),["Pluto's Headwear"]=CFrame.new(-269.45611572265625,3.8895010948181152,-333.55609130859375),["B&b (Glasses Store)"]=CFrame.new(-696.83935546875,3.6121320724487305,-335.316162109375),["Bronx Sneaker Club"]=CFrame.new(525.310791015625,3.487133026123047,-197.16981506347656),["Kevins Drip"]=CFrame.new(-202.83302307128906,3.487137794494629,-59.08943557739258),["Apartments 1"]=CFrame.new(-518.384765625,3.7872252464294434,210.3058624267578),["Apartments 2"]=CFrame.new(-276.6080627441406,4.362135887145996,-475.66217041015625),["Apartments 3"]=CFrame.new(215.5399627685547,5.237135887145996,26.223546981811523)}CW:AddDropdown({Name="Spawn/Tween Locations",List={"Gun Store 1","Gun Store 2","Boxing Gym","Garbage Job","Bank","Studio","Police Station","Car Shop","Cosmic Cuts","Pluto's Headwear","B&b (Glasses Store)","Bronx Sneaker Club","Kevins Drip","Apartments 1","Apartments 2","Apartments 3"},Callback=function(DD)CX=DC[DD]end})local function DE(Z)local T=game.Players.LocalPlayer local DF=T:FindFirstChild("BodyColors")if Z:FindFirstChild("BodyColors")and DF then Z.BodyColors.HeadColor=DF.HeadColor Z.BodyColors.TorsoColor=DF.TorsoColor Z.BodyColors.LeftArmColor=DF.LeftArmColor Z.BodyColors.RightArmColor=DF.RightArmColor Z.BodyColors.LeftLegColor=DF.LeftLegColor Z.BodyColors.RightLegColor=DF.RightLegColor end end local function DG()local T=game.Players.LocalPlayer if CX then local Z=T.Character if Z and Z:FindFirstChild("HumanoidRootPart")then Z:SetPrimaryPartCFrame(CX)end end end local function DH(Z)Z:WaitForChild("HumanoidRootPart")DE(Z)if CY then wait(1.0)DG()end end local function DI()if DB then DB:Disconnect()end end return A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z end)()
+local KeySystem = {}
+KeySystem.ValidKey = "GRAPE"
+KeySystem.Attempts = 0
+KeySystem.MaxAttempts = 5
+
+local function createKeyGUI()
+    local player = game.Players.LocalPlayer
+    local playerGui = player:WaitForChild("PlayerGui")
+    
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "KeySystemGUI"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = playerGui
+    
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Name = "MainFrame"
+    mainFrame.Size = UDim2.new(0, 400, 0, 300)
+    mainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(31, 31, 103)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Parent = screenGui
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 15)
+    corner.Parent = mainFrame
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(60, 63, 221)
+    stroke.Thickness = 2
+    stroke.Parent = mainFrame
+    
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "TitleLabel"
+    titleLabel.Size = UDim2.new(1, 0, 0, 60)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = "GRAPE.GG | Key System"
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextSize = 24
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.Parent = mainFrame
+    
+    local inputLabel = Instance.new("TextLabel")
+    inputLabel.Name = "InputLabel"
+    inputLabel.Size = UDim2.new(1, -20, 0, 30)
+    inputLabel.Position = UDim2.new(0, 10, 0, 80)
+    inputLabel.BackgroundTransparency = 1
+    inputLabel.Text = "Enter Key:"
+    inputLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    inputLabel.TextSize = 14
+    inputLabel.Font = Enum.Font.Gotham
+    inputLabel.TextXAlignment = Enum.TextXAlignment.Left
+    inputLabel.Parent = mainFrame
+    
+    local inputBox = Instance.new("TextBox")
+    inputBox.Name = "InputBox"
+    inputBox.Size = UDim2.new(1, -20, 0, 40)
+    inputBox.Position = UDim2.new(0, 10, 0, 115)
+    inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 100)
+    inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    inputBox.TextSize = 18
+    inputBox.Font = Enum.Font.Gotham
+    inputBox.PlaceholderText = "Type key here..."
+    inputBox.PlaceholderColor3 = Color3.fromRGB(100, 100, 150)
+    inputBox.BorderSizePixel = 0
+    inputBox.Parent = mainFrame
+    
+    local boxCorner = Instance.new("UICorner")
+    boxCorner.CornerRadius = UDim.new(0, 8)
+    boxCorner.Parent = inputBox
+    
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Name = "StatusLabel"
+    statusLabel.Size = UDim2.new(1, -20, 0, 30)
+    statusLabel.Position = UDim2.new(0, 10, 0, 165)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.Text = "Attempts: " .. KeySystem.Attempts .. "/" .. KeySystem.MaxAttempts
+    statusLabel.TextColor3 = Color3.fromRGB(255, 255, 100)
+    statusLabel.TextSize = 12
+    statusLabel.Font = Enum.Font.Gotham
+    statusLabel.Parent = mainFrame
+    
+    local submitButton = Instance.new("TextButton")
+    submitButton.Name = "SubmitButton"
+    submitButton.Size = UDim2.new(1, -20, 0, 40)
+    submitButton.Position = UDim2.new(0, 10, 0, 205)
+    submitButton.BackgroundColor3 = Color3.fromRGB(60, 63, 221)
+    submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    submitButton.TextSize = 16
+    submitButton.Font = Enum.Font.GothamBold
+    submitButton.Text = "Submit Key"
+    submitButton.BorderSizePixel = 0
+    submitButton.Parent = mainFrame
+    
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 8)
+    buttonCorner.Parent = submitButton
+    
+    local function checkKey()
+        local enteredKey = inputBox.Text
+        
+        if enteredKey == KeySystem.ValidKey then
+            statusLabel.Text = "✓ Key Accepted!"
+            statusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+            submitButton.Enabled = false
+            inputBox.Enabled = false
+            
+            wait(1)
+            screenGui:Destroy()
+            loadMainScript()
+        else
+            KeySystem.Attempts = KeySystem.Attempts + 1
+            statusLabel.Text = "Attempts: " .. KeySystem.Attempts .. "/" .. KeySystem.MaxAttempts
+            statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+            inputBox.Text = ""
+            
+            if KeySystem.Attempts >= KeySystem.MaxAttempts then
+                statusLabel.Text = "Max attempts reached!"
+                submitButton.Enabled = false
+                inputBox.Enabled = false
+                
+                wait(2)
+                player:Kick("Invalid key. Too many attempts.")
+            end
+        end
+    end
+    
+    submitButton.MouseButton1Click:Connect(checkKey)
+    
+    inputBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            checkKey()
+        end
+    end)
+    
+    inputBox:CaptureFocus()
+end
+
+function loadMainScript()
+    local Library = loadstring(game:GetObjects("rbxassetid://7657867786")[1].Source)("Pepsi's UI Library")
+
+local Window = Library:CreateWindow({
+    Name = 'GRAPE.GG | South Bronx',
+    Themeable = {
+        Info = 'Best Upcoming Script?!',
+        Credit = false,
+    },
+DefaultTheme = '{"__Designer.Colors.topGradient":"232323","__Designer.Settings.ShowHideKey":"Enum.KeyCode.RShift","__Designer.Colors.section":"B0AFB0","__Designer.Colors.hoveredOptionBottom":"2D2D2D","__Designer.Background.ImageAssetID":"rbxassetid://0","__Designer.Colors.innerBorder":"493F49","__Designer.Colors.unselectedOption":"282828","__Designer.Files.WorkspaceFile":"DodgeBros","__Designer.Colors.unhoveredOptionTop":"323232","__Designer.Colors.outerBorder":"0F0F0F","__Designer.Background.ImageColor":"FFFFFF","__Designer.Colors.tabText":"B9B9B9","__Designer.Colors.elementBorder":"141414","__Designer.Colors.sectionBackground":"232222","__Designer.Colors.selectedOption":"373737","__Designer.Colors.background":"282828","__Designer.Colors.bottomGradient":"1D1D1D","__Designer.Background.ImageTransparency":100,"__Designer.Colors.main":"FFFFFF","__Designer.Colors.elementText":"939193","__Designer.Colors.hoveredOptionTop":"414141","__Designer.Colors.otherElementText":"817F81","__Designer.Colors.unhoveredOptionBottom":"232323","__Designer.Background.UseBackgroundImage":false}'
+})
+local GeneralTab = Window:CreateTab({
+    Name = 'General'
+})
+
+local MainSection = GeneralTab:CreateSection({
+    Name = '|Player|',
+    Side = 'Left'
+})
+
+MainSection:AddToggle({
+    Name = "| Semi GodMode",
+    StartingState = false,
+    Description = "This Enables Semi GodMode.",
+    Callback = function(state)
+        if state then
+            loadstring(game:HttpGet('https://pastebin.com/raw/a81PCdNV'))()
+        end
+    end
+})
+
+MainSection:AddToggle({
+    Name = "| Hitbox Expander",
+    StartingState = false,
+    Description = "This Expands the Hitbox of Players.",
+    Callback = function(state)
+        if state then
+            loadstring(game:HttpGet('https://pastebin.com/raw/6zXxnvRE'))()
+        end
+    end
+})
+
+MainSection:AddToggle({
+    Name = "| Forward Teleport ( T )",
+    StartingState = false,
+    Description = "This Teleports You Forward.",
+    Callback = function(state)
+        if state then
+            loadstring(game:HttpGet('https://pastebin.com/raw/ZjVJQMAk'))()
+        end
+    end
+})
+
+MainSection:AddToggle{
+    Name = "| Insta-Interact",
+    Callback = function()
+         for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+         if v:IsA("ProximityPrompt") then
+            v["HoldDuration"] = 0
+         end
+      end
+      game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(v)
+         v["HoldDuration"] = 0
+      end)
+    end
+}
+MainSection:AddToggle({
+    Name = "| Fly ( V )",
+    StartingState = false,
+    Callback = function(state)
+        if state then
+            loadstring(game:HttpGet('https://pastebin.com/raw/TVYcXkS4'))()
+        end
+    end
+})
+
+MainSection:AddToggle({
+    Name = "| Invisible ( X )",
+    StartingState = false,
+    Callback = function(state)
+        if state then
+            loadstring(game:HttpGet('https://pastebin.com/raw/vsWgWXPY'))()
+        end
+    end
+})
+
+MainSection:AddToggle{
+    Name = "| Ctrl + Click = Delete",
+    Callback = function()
+local Plr = game:GetService("Players").LocalPlayer
+local Mouse = Plr:GetMouse()
+ 
+Mouse.Button1Down:connect(function()
+if not game:GetService("UserInputService"):IsKeyDown(Enum.KeyCode.LeftControl) then return end
+if not Mouse.Target then return end
+Mouse.Target:Destroy()
+end)
+    end
+}
+MainSection:AddToggle{
+    Name = '| Infinite Zoom',
+    Callback = function(state)
+    getgenv().host = game:GetService'Players'.LocalPlayer
+
+    host.CameraMaxZoomDistance = math.huge
+        end
+    }   
+
+MainSection:AddToggle{
+    Name = '| Stretch Res',
+    Value = false,
+    Flag = 'stretchres',
+    Locked = false,
+    Callback = function(state)
+        stretchResEnabled = state
+
+        if stretchResEnabled then
+            getgenv().Resolution = {
+                [".gg/scripters"] = 0.65 
+            }
+
+            if not stretchConnection then
+                stretchConnection = runService.RenderStepped:Connect(function()
+                    Camera.CFrame = Camera.CFrame * CFrame.new(0, 0, 0, 1, 0, 0, 0, getgenv().Resolution[".gg/scripters"], 0, 0, 0, 1)
+                end)
+            end
+        else
+            if stretchConnection then
+                stretchConnection:Disconnect()
+                stretchConnection = nil
+            end
+        end
+    end
+}
+
+MainSection:AddToggle{
+    Name = "| Call-All",
+    Side = "Left",
+
+    Callback = function()
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Players = game:GetService("Players")
+        
+        local phoneEvent = ReplicatedStorage:FindFirstChild("RemoteEvents"):FindFirstChild("RE_Phone")
+        
+        if phoneEvent then
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= game.Players.LocalPlayer then 
+                    phoneEvent:FireServer("CallRequest", { Target = player })
+        
+                    task.wait(1) 
+                    phoneEvent:FireServer("CallResponse", { Response = {true} }) 
+                end
+            end
+        end
+
+end,
+}
+
+MainSection:AddToggle{
+    Name = '| Equip All',
+    Value = false,
+    Flag = 'Equid',
+    Locked = false,
+    Callback = function(state)
+
+        local EquipEnabled = false
+
+        local function IXIQZO_fake_script(state) 
+            local script = Instance.new('LocalScript', PopCorn)
+         
+            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+            if v:IsA("Tool") then
+            v.Parent = game.Players.LocalPlayer.Character
+            end
+            end
+            end
+        coroutine.wrap(IXIQZO_fake_script)()
+        end,
+        }
+
+
+
+
+local SpeedSlider = MainSection:AddSlider({
+    Name = 'Adjust Speed',
+    Flag = "SpeedFster",
+    Value = 12,
+    Min = 0,
+    Max = 23,
+    Decimals = 1,
+    llegalInput = false,
+    Callback = function(value)
+       local player = game.Players.LocalPlayer
+        local humanoid = player.Character and player.Character:FindFirstChild("Humanoid")
+        
+        if humanoid then
+            humanoid.WalkSpeed = value 
+        end
+    end
+})
+
+local FOVSlider = MainSection:AddSlider({
+    Name = 'Adjust FOV',
+    Flag = "BegFOV",
+    Value = 70,
+    Min = 70,
+    Max = 120,
+    Decimals = 1,
+    llegalInput = false,
+    Callback = function(value)
+       workspace.CurrentCamera.FieldOfView = value
+    end
+})
+
+local Button = MainSection:AddButton({
+    Name = 'Fix-Floor',
+    Callback = function()
+
+
+local player = game.Players.LocalPlayer
+
+local function fixFloor()
+    local floor = workspace:FindFirstChild("Floor")
+    if floor then
+        floor.Size = Vector3.new(5000, -1, 5000)
+        floor.Position = Vector3.new(0, 0, 0) 
+        floor.Anchored = true
+    else
+        floor = Instance.new("Part")
+        floor.Name = "Floor"
+        floor.Size = Vector3.new(5000, -1, 5000)
+    	floor.Position = Vector3.new(0, 0, 0)
+        floor.Anchored = true
+        floor.Parent = workspace
+    end
+end
+
+player.CharacterAdded:Connect(function(character)
+    fixFloor()
+end)
+
+if player.Character then
+    fixFloor()
+end
+end
+})
+
+
+local TPSection = GeneralTab:CreateSection({
+    Name = '|Kill Player',
+    Side = 'Right'
+})
+
+local TextBoxPlayer = TPSection:AddTextbox({
+    Name = 'Tp To Player (Stop = L)',
+    Flag = "Name",
+    Value = "",
+    Locked = true, 
+    Callback = function(Text)
+        local UserInputService = game:GetService("UserInputService")
+        local running = true 
+        local targetName = (Text) 
+        
+        UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if input.KeyCode == Enum.KeyCode.L then
+                running = false 
+            end
+        end)
+        
+        while running do
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local targetPlayer = game.Players:FindFirstChild(targetName)
+        
+            if character and character:FindFirstChild("HumanoidRootPart") and targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local p1 = character.HumanoidRootPart
+                local targetHRP = targetPlayer.Character.HumanoidRootPart
+        
+                local behindPosition = targetHRP.CFrame * CFrame.new(0, 0, -2)
+                p1.CFrame = behindPosition
+            end
+        
+            wait(0.01) 
+        end
+end,
+})
+
+
+
+
+local TGSection = GeneralTab:CreateSection({
+    Name = ' |View Options|',
+    Side = 'Right'   
+})
+
+local TargetName = ""
+    local originalCameraSubject
+    local ScreenGui
+
+    local function findPlayerByName(name)
+        name = string.lower(name)
+        for _, player in pairs(game.Players:GetPlayers()) do
+            local playerName = string.lower(player.Name)
+            local displayName = player.DisplayName and string.lower(player.DisplayName) or nil
+            
+            if string.sub(playerName, 1, #name) == name or (displayName and string.sub(displayName, 1, #name) == name) then
+                return player
+            end
+        end
+        return nil
+    end
+
+    TGSection:AddTextbox({
+        Name = "       <-Target Name->",
+        Value = TargetName,
+        Callback = function(input)
+            local player = findPlayerByName(input)
+            TargetName = player and player.Name or ""
+        end
+    })
+
+    local function createInventoryGUI(playerName)
+        if ScreenGui then
+            ScreenGui:Destroy() 
+        end
+
+        ScreenGui = Instance.new("ScreenGui")
+        local Background = Instance.new("Frame")
+        local ScrollFrame = Instance.new("ScrollingFrame")
+        local TitleLabel = Instance.new("TextLabel")
+        local UIListLayout = Instance.new("UIListLayout")
+        local UIListPadding = Instance.new("UIPadding")
+        local InvLabels = {}
+
+        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+        ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+        Background.Name = "Background"
+        Background.Parent = ScreenGui
+        Background.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+        Background.BorderSizePixel = 2
+        Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+        Background.Position = UDim2.new(1, -260, 0, 20)
+        Background.Size = UDim2.new(0.12, 0, 0.3, 0)
+        Background.ClipsDescendants = true
+
+        local gradient = Instance.new("UIGradient")
+        gradient.Parent = Background
+        gradient.Color = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(42, 42, 42)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(42, 42, 42))
+        }
+        gradient.Rotation = 45
+
+        local stroke = Instance.new("UIStroke")
+        stroke.Parent = Background
+        stroke.Color = Color3.fromRGB(0, 0, 0)
+        stroke.Thickness = 2
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+        TitleLabel.Name = "TitleLabel"
+        TitleLabel.Parent = Background
+        TitleLabel.BackgroundTransparency = 1
+        TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+        TitleLabel.Font = Enum.Font.SourceSansBold
+        TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TitleLabel.TextSize = 18
+        TitleLabel.TextScaled = true
+        TitleLabel.TextWrapped = true
+        TitleLabel.TextStrokeTransparency = 0.3
+        TitleLabel.Text = "Inventory"
+
+        ScrollFrame.Parent = Background
+        ScrollFrame.Size = UDim2.new(1, -10, 0, 250)
+        ScrollFrame.Position = UDim2.new(0, 5, 0, 35)
+        ScrollFrame.ScrollBarThickness = 10
+        ScrollFrame.BackgroundTransparency = 1
+        ScrollFrame.ClipsDescendants = true
+
+        UIListLayout.Parent = ScrollFrame
+        UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+        UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        UIListLayout.Padding = UDim.new(0, 5)
+
+        UIListPadding.Parent = ScrollFrame
+        UIListPadding.PaddingTop = UDim.new(0, 5)
+
+        local function createLabel(name)
+            local label = Instance.new("TextLabel")
+            label.Name = name
+            label.BackgroundTransparency = 0.5
+            label.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            label.BorderSizePixel = 1
+            label.BorderColor3 = Color3.fromRGB(30, 30, 30)
+            label.Size = UDim2.new(1, -10, 0, 22)
+            label.Font = Enum.Font.SourceSans
+            label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            label.TextScaled = true
+            label.TextSize = 14
+            label.TextWrapped = true
+            return label
+        end
+
+        for i = 1, 40 do
+            local label = createLabel("Inv" .. i)
+            label.Parent = ScrollFrame
+            table.insert(InvLabels, label)
+        end
+
+        local function getPlayerInventory(targetPlayer)
+            local backpack = targetPlayer:FindFirstChildOfClass("Backpack")
+            if backpack then
+                local items = backpack:GetChildren()
+                for i, label in ipairs(InvLabels) do
+                    label.Text = items[i] and items[i].Name or ""
+                end
+                ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, math.max(#items, #InvLabels) * 27)
+            else
+                for _, label in ipairs(InvLabels) do
+                    label.Text = "No Items"
+                end
+                ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 27)
+            end
+        end
+
+        local targetPlayer = findPlayerByName(playerName)
+
+        if targetPlayer then
+            TitleLabel.Text = playerName .. "'s Inventory"
+            getPlayerInventory(targetPlayer)
+        else
+            TitleLabel.Text = "Player Not Found"
+        end
+    end
+
+    TGSection:AddToggle({
+        Name = "| View [Inventory]",
+        Flag = "TGSection_View[Inventory]",
+        Callback = function(State)
+            if State then
+                createInventoryGUI(TargetName)
+            else
+                if ScreenGui then
+                    ScreenGui:Destroy()
+                    ScreenGui = nil
+                end
+            end
+        end
+    })
+
+    TGSection:AddToggle({
+        Name = "| Spectate",
+        Callback = function(Value)
+            local Players = game:GetService("Players")
+            local LocalPlayer = Players.LocalPlayer
+
+            if Value then
+                if IsSpectating then
+                    return
+                end
+
+                local TargetPlayer = Players:FindFirstChild(TargetName)
+
+                if TargetPlayer and TargetPlayer.Character then
+                    originalCameraSubject = workspace.CurrentCamera.CameraSubject
+                    workspace.CurrentCamera.CameraSubject = TargetPlayer.Character:FindFirstChild("Humanoid")
+                    IsSpectating = true
+                else
+                    CreateNotification({
+                        Title = "Error",
+                        Text = "Invalid Name",
+                        ButtonText = "Okay",
+                        Duration = 99999
+                    })
+                end
+            else
+                if IsSpectating then
+                    workspace.CurrentCamera.CameraSubject = originalCameraSubject
+                    IsSpectating = false
+                end
+            end
+        end,
+    })
+
+local GunSection = GeneralTab:CreateSection({
+    Name = '|Gun Mods|',
+    Side = 'Left'
+})
+
+local Players = game:GetService("Players")
+
+
+local isToggled = false
+
+
+local function continuouslyUpdateWeaponStats(player)
+    while isToggled do 
+        local backpack = player:FindFirstChild("Backpack")
+        if backpack then
+            for _, item in ipairs(backpack:GetChildren()) do
+                if item:IsA("Tool") then
+                     if item:FindFirstChild("Ammo") and item:FindFirstChild("Mag") then
+                        item.Ammo.Value = math.huge
+                        item.Mag.Value = math.huge
+                        game:GetService("ReplicatedStorage").RemoteEvents.ChangeMagAndAmmo:Destroy()
+                    end
+                end
+            end
+        end
+        wait(0) 
+    end
+end
+
+
+
+
+local Toggle = GunSection:AddToggle({
+    Name = "| Infinite Ammo ",
+    Value = false,
+    Flag = "WeaponStatsToggle", 
+    Callback = function(Value)
+        isToggled = Value 
+        if isToggled then
+            
+            for _, player in ipairs(Players:GetPlayers()) do
+                task.spawn(function()
+                    continuouslyUpdateWeaponStats(player)
+                end)
+            end
+        end
+    end,
+})
+
+local Toggle = GunSection:AddToggle({
+    Name = '| Music On Hit',
+    Value = false,
+    Flag = "Hit",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local backpack = player.Backpack
+        
+        for _, item in pairs(backpack:GetChildren()) do
+            if item:IsA("Tool") and item:FindFirstChild("Setting") then
+                local gun = require(item.Setting)
+                local music = {109566167393222} 
+                gun["HitCharSndIDs"] = music
+                gun["HitCharSndVolume"] = 10
+            end
+        end
+        
+    end
+})
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        if isToggled then
+            task.spawn(function()
+                continuouslyUpdateWeaponStats(player)
+            end)
+        end
+    end)
+end)
+
+
+if isToggled then
+    for _, player in ipairs(Players:GetPlayers()) do
+        task.spawn(function()
+            continuouslyUpdateWeaponStats(player)
+        end)
+    end
+end
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local toggleEnabled = false 
+local fireRateValue = 0.147 
+local function enableOneShot(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+        
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" and settings.BaseDamage ~= nil then
+                settings.FireRate = fireRateValue 
+                settings.Auto = true 
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function disableOneShot(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+        
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" and settings.BaseDamage ~= nil then
+                settings.FireRate = 0.147 
+                settings.Auto = false  
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function onCharacterAdded(character)
+    character.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                enableOneShot(child)
+            else
+                disableOneShot(child)
+            end
+        end
+    end)
+
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                enableOneShot(child)
+            else
+                disableOneShot(child)
+            end
+        end
+    end
+end
+
+if localPlayer.Character then
+    onCharacterAdded(localPlayer.Character)
+end
+
+localPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+local Toggle = GunSection:AddToggle({
+    Name = '| Rapid Fire',
+    Value = false,
+    Flag = 'rafire',
+    Locked = false,
+    Callback = function(Value)
+        toggleEnabled = Value
+
+        if localPlayer.Character then
+            for _, child in ipairs(localPlayer.Character:GetChildren()) do
+                if child:IsA("Tool") then
+                    if toggleEnabled then
+                        enableOneShot(child)
+                    else
+                        disableOneShot(child)
+                    end
+                end
+            end
+        end
+    end
+})
+
+local Slider = GunSection:AddSlider({
+    Name = 'Firerate Settings',
+    Flag = "sliderRate",
+    Value = 0.147, 
+    Min = 0.03, 
+    Max = 0.147, 
+    Decimals = 3, 
+    Callback = function(Value)
+        fireRateValue = Value
+        print("")
+
+        if toggleEnabled and localPlayer.Character then
+            for _, child in ipairs(localPlayer.Character:GetChildren()) do
+                if child:IsA("Tool") then
+                    enableOneShot(child)
+                end
+            end
+        end
+    end
+})
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local toggleEnabled = false 
+
+local function quickReloadEnabled(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+        
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" and settings.ReloadTime ~= nil then
+                settings.ReloadTime = 0 
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function quickReload(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+        
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" and settings.ReloadTime ~= nil then
+                settings.ReloadTime = 2.9 
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function onCharacterAdded(character)
+    character.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                quickReloadEnabled(child)
+            else
+                quickReload(child)
+            end
+        end
+    end)
+
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                quickReloadEnabled(child)
+            else
+                quickReload(child)
+            end
+        end
+    end
+end
+
+if localPlayer.Character then
+    onCharacterAdded(localPlayer.Character)
+end
+
+localPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+local Toggle = GunSection:AddToggle({
+    Name = '| Quick Reload',
+    Value = false,
+    Flag = 'quickfire',
+    Locked = false,
+    Callback = function(Value)
+        toggleEnabled = Value
+
+        if localPlayer.Character then
+            for _, child in ipairs(localPlayer.Character:GetChildren()) do
+                if child:IsA("Tool") then
+                    if toggleEnabled then
+                        quickReloadEnabled(child)
+                    else
+                        quickReload(child)
+                    end
+                end
+            end
+        end
+    end
+})
+
+local Toggle = GunSection:AddToggle({
+    Name = "| Shotgun Mode",
+    Value = false,
+    Flag = "Shotgun",
+    locked = false,
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local backpack = player.Backpack
+        
+        for _, item in pairs(backpack:GetChildren()) do
+            if item:IsA("Tool") and item:FindFirstChild("Setting") then
+                local gun = require(item.Setting)
+                gun["ShotgunEnabled"] = true
+            end
+        end
+    end
+})
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local toggleEnabled = false 
+
+local defaultSettings = {}
+
+local function enableModifications(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" then
+                if not defaultSettings[tool.Name] then
+                    defaultSettings[tool.Name] = {
+                        Accuracy = settings.Accuracy,
+                        SpreadX = settings.SpreadX,
+                        SpreadY = settings.SpreadY,
+                        Range = settings.Range,
+                        Recoil = settings.Recoil
+                    }
+                end
+
+                settings.Accuracy = 1
+                settings.SpreadX = 0
+                settings.SpreadY = 0
+                settings.Range = 50000
+                settings.Recoil = 0
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function resetToDefaults(tool)
+    if tool:IsA("Tool") then
+        local settingModule = tool:FindFirstChild("Setting")
+
+        if settingModule and settingModule:IsA("ModuleScript") then
+            local success, settings = pcall(require, settingModule)
+
+            if success and type(settings) == "table" and defaultSettings[tool.Name] then
+                local defaults = defaultSettings[tool.Name]
+                settings.Accuracy = defaults.Accuracy
+                settings.SpreadX = defaults.SpreadX
+                settings.SpreadY = defaults.SpreadY
+                settings.Range = defaults.Range
+                settings.Recoil = defaults.Recoil
+            else
+                print("")
+            end
+        else
+            print("")
+        end
+    end
+end
+
+local function onCharacterAdded(character)
+    character.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                enableModifications(child)
+            else
+                resetToDefaults(child)
+            end
+        end
+    end)
+
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Tool") then
+            if toggleEnabled then
+                enableModifications(child)
+            else
+                resetToDefaults(child)
+            end
+        end
+    end
+end
+
+if localPlayer.Character then
+    onCharacterAdded(localPlayer.Character)
+end
+
+localPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+local Toggle = GunSection:AddToggle({
+    Name = '| 0 Recoil',
+    Value = false,
+    Flag = 'quickaim',
+    Locked = false,
+    Callback = function(Value)
+        toggleEnabled = Value
+
+        if localPlayer.Character then
+            for _, child in ipairs(localPlayer.Character:GetChildren()) do
+                if child:IsA("Tool") then
+                    if toggleEnabled then
+                        enableModifications(child)
+                    else
+                        resetToDefaults(child)
+                    end
+                end
+            end
+        end
+    end
+})
+
+local Toggle = GunSection:AddToggle({
+    Name = "| No Jam",
+    Value = false,
+    Flag = "NoJam",
+    Locked = flase,
+    Callback = function()
+
+        local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+
+for _, item in pairs(backpack:GetChildren()) do
+    if item:IsA("Tool") and item:FindFirstChild("Setting") then
+        local gun = require(item.Setting)
+        gun["JamChance"] = 0 
+    end
+end
+end
+})
+
+end
+
+createKeyGUI()
